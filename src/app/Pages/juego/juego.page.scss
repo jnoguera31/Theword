@@ -1,0 +1,49 @@
+.container{
+    display: flex;
+    justify-content: space-around; /* Distribuye los inputs equitativamente en el espacio disponible */
+    margin-bottom: 10px;
+  }
+  
+.input-dinamico{
+    height: 40px;
+    width: 40px;
+    margin-left: 5px;
+    font-size: 40px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: capitalize;
+    
+
+}
+
+/* app.component.scss */
+.input-row {
+  display: flex;
+  justify-content: space-around; /* Distribuye los inputs equitativamente en el espacio disponible */
+  margin-bottom: 10px;display: flex;
+
+  
+}
+
+.custom-input {
+  height: 40px;
+  width: 40px;
+  margin-left: 5px;
+  font-size: 40px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: capitalize;
+  /* Agrega otros estilos según tus preferencias */
+}
+ion-input{
+  height: 40px;
+  width: 40px;
+  margin-left: 5px;
+  font-size: 40px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: capitalize;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Lapalabra",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

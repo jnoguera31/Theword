@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Juego</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <h1>Jugador: {{ player }}</h1>
+  <h1>Nivel:  {{ nivel }}</h1>
+
+  
+  <div *ngFor="let _ of getNumberArray(numeroFilas); let i = index">
+    <div class="input-row" [hidden]="i !== filaActual">
+      <ion-item *ngFor="let j of getNumberArray(5); let k = index">
+        <ion-input
+          [(ngModel)]="inputValues[i * 5 + k]"
+          maxlength="1"
+          [id]="'input-' + (i * 5 + k)"
+          class="custom-input"
+        ></ion-input>
+      </ion-item>
+    </div>
+  </div>
+  <ion-button expand="full" (click)="verificarPalabra()">Verificar</ion-button>
+  
+</ion-content>
