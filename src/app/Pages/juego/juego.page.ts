@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Storage } from '@capacitor/storage';
 import { WordsService } from 'src/app/services/words.services';
+import { FilaInputs } from 'src/app/model/fila-inputs.model';
 
 @Component({
   selector: 'app-juego',
@@ -8,23 +9,28 @@ import { WordsService } from 'src/app/services/words.services';
   styleUrls: ['./juego.page.scss'],
 })
 export class JuegoPage implements OnInit {
-
-  filaActual: number = 0;
-  letters = ['A', 'B', 'C', 'D', 'E'];
-  inputValues: string[] = ['', '', '', '', ''];
+  @ViewChildren('inputFila', { read: ElementRef }) inputsFila: QueryList<ElementRef>;
+  // VARIABLES
+  filas: FilaInputs[] = [];
+  numeroFilas=7// Puedes cambiar este valor según tus necesidades
   palabraSecreta = "";
-  numeroFilas = 5;
+  filaActual: number = 0; 
   level: any;
   player: any;
   nivel: string = "";
 
-  constructor(private wordsService: WordsService) {}
+  constructor(private wordsService: WordsService) {
+    this.inputsFila = new QueryList<ElementRef>();
+  }
 
   ngOnInit() {
     this.getPlayer();
     this.getLevel();
     this.getRandomWord();
   }
+
+  
+
 
   getRandomWord() {
     this.wordsService.getRandomWord().subscribe(word => {
@@ -47,53 +53,90 @@ export class JuegoPage implements OnInit {
       if (this.level == '1') {
         this.nivel = "Fácil";
         this.numeroFilas = 7;
-      } else if (this.level == '5') {
+        console.log('Número de filas para nivel fácil:', this.numeroFilas);
+      } else if (this.level == '2') {
         this.nivel = "Intermedio";
-        this.numeroFilas = 7;
+        this.numeroFilas = 5;
+        console.log('Número de filas para nivel Intermedio:', this.numeroFilas);
       } else {
-        this.nivel = "Dificil";
+        this.nivel = "Difícil";
         this.numeroFilas = 3;
+        console.log('Número de filas para nivel dificil:', this.numeroFilas);
       }
+
+    this.crearFilasSegunVariable(this.numeroFilas)
     });
   }
 
-  getNumberArray(num: number): number[] {
-    return Array.from({ length: num }, (_, index) => index);
-  }
 
-  verificarPalabra() {
-    const palabraIngresada = this.inputValues.slice(this.filaActual * 5, this.filaActual * 5 + 5).join('').toUpperCase();
-    const letrasSecretas = this.palabraSecreta.slice(this.filaActual * 5, this.filaActual * 5 + 5);
-
-    for (let i = 0; i < 5; i++) {
-      const letraIngresada = palabraIngresada.charAt(i);
-      const letraSecreta = letrasSecretas.charAt(i);
-
-      if (letraIngresada === letraSecreta) {
-        this.setInputColor(this.filaActual * 5 + i, 'green');
-      } else if (letrasSecretas.includes(letraIngresada)) {
-        this.setInputColor(this.filaActual * 5 + i, 'yellow');
-      } else {
-        this.setInputColor(this.filaActual * 5 + i, 'red');
-      }
-    }
-
-    if (palabraIngresada === letrasSecretas) {
-      if (this.filaActual === this.numeroFilas - 1) {
-        alert("¡Ganaste el juego!");
-      } else {
-        this.filaActual++;
-        this.inputValues.fill('', this.filaActual * 5, this.filaActual * 5 + 5);
-      }
-    } else {
-      alert("Sigue intentando");
+  crearFilasSegunVariable(cantidad: number) {
+    for (let i = 0; i < cantidad; i++) {
+      const nuevaFila = new FilaInputs();
+      nuevaFila.habilitada = i === 0; // Habilitar solo la primera fila
+      this.filas.push(nuevaFila);
     }
   }
 
-  setInputColor(index: number, color: string) {
-    const inputElement = document.getElementById(`input-${index}`);
-    if (inputElement) {
-      inputElement.style.backgroundColor = color;
+  agregarFila() {
+    const nuevaFila = new FilaInputs();
+    nuevaFila.habilitada = this.filas.length === this.filaActual; // Habilitar solo la fila en la posición filaActual
+    this.filas.push(new FilaInputs());
+  }
+
+  verificarFila(): boolean {
+    // Obtener las letras ingresadas por el jugador en la fila actual
+    const inputs = this.inputsFila.filter((_, i) => Math.floor((i as number) / 5) === this.filaActual);
+    const letrasIngresadas = inputs.map(input => input.nativeElement.value.trim().toUpperCase());
+  
+    // Verificar si todos los campos están llenos
+    for (const input of inputs) {
+      if (input.nativeElement.value.trim() === '') {
+        console.log('Falta llenar uno o más campos en la fila', this.filaActual + 1);
+        return false;
+      }
     }
+  
+    // Obtener las letras de la palabra secreta
+    const letrasPalabraSecreta = this.palabraSecreta.split('');
+  
+    // Comparar las letras
+    letrasIngresadas.forEach((letra, i) => {
+      const input = inputs[i];
+      const letraSecreta = letrasPalabraSecreta[i];
+  
+      if (letra === letraSecreta) {
+        // Coinciden con la posición
+        input.nativeElement.style.backgroundColor = 'green';
+        input.nativeElement.style.color = 'white';
+      } else if (letrasPalabraSecreta.includes(letra)) {
+        // Existe, pero no en la misma posición
+        input.nativeElement.style.backgroundColor = 'yellow';
+        input.nativeElement.style.color = 'white';
+      } else {
+        // No existe en la palabra secreta
+        input.nativeElement.style.backgroundColor = 'darkgray';
+        input.nativeElement.style.color = 'white';
+      }
+    });
+  
+    // Si todos los campos están llenos, pasar a la siguiente fila
+    console.log('Todos los campos de la fila', this.filaActual + 1, 'están llenos');
+    this.siguienteFila();
+    return true;
+  }
+  
+
+  siguienteFila() {
+    // Deshabilitar la fila anterior
+    if (this.filaActual > 0) {
+      this.filas[this.filaActual - 1].habilitada = false;
+    }
+  
+    // Habilitar la nueva fila actual
+    if (this.filaActual < this.filas.length) {
+      this.filas[this.filaActual].habilitada = true;
+    }
+  
+    this.filaActual++;
   }
 }

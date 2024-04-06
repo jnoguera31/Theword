@@ -4,24 +4,20 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-
+<ion-content [fullscreen]="true" scrollEvents="false">
   <h1>Jugador: {{ player }}</h1>
   <h1>Nivel:  {{ nivel }}</h1>
 
+  <ng-container *ngFor="let fila of filas; let i = index">
+    
+      <ion-row>
+        <ion-col size="2.4" *ngFor="let letra of ['letra1','letra2','letra3','letra4','letra5']">
+          <ion-input class="custom-input" #inputFila maxlength="1" pattern="[a-zA-Z]" [(ngModel)]="fila['datos'][letra]" [disabled]="!fila.habilitada && i !== filaActual"></ion-input>
+        </ion-col>
+      </ion-row>
+    
+  </ng-container>
   
-  <div *ngFor="let _ of getNumberArray(numeroFilas); let i = index">
-    <div class="input-row" [hidden]="i !== filaActual">
-      <ion-item *ngFor="let j of getNumberArray(5); let k = index">
-        <ion-input
-          [(ngModel)]="inputValues[i * 5 + k]"
-          maxlength="1"
-          [id]="'input-' + (i * 5 + k)"
-          class="custom-input"
-        ></ion-input>
-      </ion-item>
-    </div>
-  </div>
-  <ion-button expand="full" (click)="verificarPalabra()">Verificar</ion-button>
   
+  <ion-button (click)="verificarFila()">Verificar</ion-button> 
 </ion-content>
