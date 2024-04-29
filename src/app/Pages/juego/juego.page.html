@@ -5,9 +5,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" scrollEvents="false">
-  <h1>Jugador: {{ player }}</h1>
-  <h1>Nivel:  {{ nivel }}</h1>
+  <div class="info">
 
+   <h1>Jugador: {{ player }}</h1>
+   <h1>Nivel:  {{ nivel }}</h1>
+
+   <h1 id="tiempo" >Tiempo</h1>
+
+  </div>
+  
+ 
   <ng-container *ngFor="let fila of filas; let i = index">
     
       <ion-row>
@@ -20,4 +27,5 @@
   
   
   <ion-button (click)="verificarFila()">Verificar</ion-button> 
+
 </ion-content>

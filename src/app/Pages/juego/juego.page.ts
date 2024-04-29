@@ -2,6 +2,9 @@ import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular
 import { Storage } from '@capacitor/storage';
 import { WordsService } from 'src/app/services/words.services';
 import { FilaInputs } from 'src/app/model/fila-inputs.model';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-juego',
@@ -11,15 +14,17 @@ import { FilaInputs } from 'src/app/model/fila-inputs.model';
 export class JuegoPage implements OnInit {
   @ViewChildren('inputFila', { read: ElementRef }) inputsFila: QueryList<ElementRef>;
   // VARIABLES
+
   filas: FilaInputs[] = [];
-  numeroFilas=7// Puedes cambiar este valor según tus necesidades
+  numeroFilas=7 // Puedes cambiar este valor según tus necesidades
   palabraSecreta = "";
   filaActual: number = 0; 
   level: any;
   player: any;
   nivel: string = "";
+  
 
-  constructor(private wordsService: WordsService) {
+  constructor(private wordsService: WordsService, private alertController: AlertController, public router: Router) {
     this.inputsFila = new QueryList<ElementRef>();
   }
 
@@ -84,11 +89,14 @@ export class JuegoPage implements OnInit {
   }
 
   verificarFila(): boolean {
+
     // Obtener las letras ingresadas por el jugador en la fila actual
+
     const inputs = this.inputsFila.filter((_, i) => Math.floor((i as number) / 5) === this.filaActual);
     const letrasIngresadas = inputs.map(input => input.nativeElement.value.trim().toUpperCase());
   
     // Verificar si todos los campos están llenos
+
     for (const input of inputs) {
       if (input.nativeElement.value.trim() === '') {
         console.log('Falta llenar uno o más campos en la fila', this.filaActual + 1);
@@ -97,14 +105,22 @@ export class JuegoPage implements OnInit {
     }
   
     // Obtener las letras de la palabra secreta
+
     const letrasPalabraSecreta = this.palabraSecreta.split('');
-  
+    
+    const todasCoinciden = letrasIngresadas.every((letra, i) => letra === letrasPalabraSecreta[i]);
+
+    if(todasCoinciden){
+      this.Ganar()
+    }
     // Comparar las letras
+
     letrasIngresadas.forEach((letra, i) => {
       const input = inputs[i];
       const letraSecreta = letrasPalabraSecreta[i];
   
       if (letra === letraSecreta) {
+
         // Coinciden con la posición
         input.nativeElement.style.backgroundColor = 'green';
         input.nativeElement.style.color = 'white';
@@ -117,6 +133,8 @@ export class JuegoPage implements OnInit {
         input.nativeElement.style.backgroundColor = 'darkgray';
         input.nativeElement.style.color = 'white';
       }
+
+
     });
   
     // Si todos los campos están llenos, pasar a la siguiente fila
@@ -127,16 +145,55 @@ export class JuegoPage implements OnInit {
   
 
   siguienteFila() {
+
     // Deshabilitar la fila anterior
+
     if (this.filaActual > 0) {
       this.filas[this.filaActual - 1].habilitada = false;
     }
   
     // Habilitar la nueva fila actual
+
     if (this.filaActual < this.filas.length) {
       this.filas[this.filaActual].habilitada = true;
     }
   
     this.filaActual++;
   }
+
+
+  Ganar(){
+
+    // Mensaje de fecilitacion
+    
+    this.presentAlert()
+
+
+    /// Logica para guardar info en DB
+  }
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'GANASTE',
+      subHeader: "Resumen de juego",
+      message: "Palabra secreta: " + this.palabraSecreta + "<br>" + "Nivel: " + this.nivel + "<br>" + "Jugador: " + this.player,
+      
+      
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+
+            this.router.navigateByUrl('/inicio')
+          },
+        },
+      
+        
+      ],
+    });
+  
+    await alert.present();
+  }
+
+
+
 }
