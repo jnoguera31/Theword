@@ -1,20 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25+Charted&family=Poetsen+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Jersey+25+Charted&family=Poetsen+One&display=swap');
+
+
 ion-content{
- --background: #0f0f0f9c;
+
+    --ion-background-color: #111D12;
 }
 
+
 ion-title{
-    color: coral;
+    color: rgba(235, 231, 229, 0.938);
     align-content: center;
+    font-family: "Poetsen One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 37px;
 }
+
+ion-toolbar{
+    justify-content: center;
+    text-align: center;
+}
+
+
 #label{
     
     margin-bottom:  20px;
     margin-top: 15px;
+    color: aliceblue;
     text-transform: uppercase;
+
 }
 ion-button{
     font-weight: bold;
     font-size: large;
     text-transform: uppercase;
     margin-bottom: 10px;
+}
+
+#Recor{
+    font-weight: bold;
+    font-size: large;
+    text-transform: uppercase;
+    margin-top: 40px; 
+    --background: #e2d300ea;
+    
 }

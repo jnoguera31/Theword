@@ -33,6 +33,11 @@ export class InicioPage implements OnInit {
    return 0
   }
 
+  goTorecor(){
+    this.router.navigateByUrl("/recor")
+  }
+
+
   async Onplay(selectedButton: { id: number, label: string, color: string, level: number, vida: number }) {
     console.log('Nivel seleccionado:', selectedButton.level);
 

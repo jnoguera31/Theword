@@ -16,6 +16,11 @@ const routes: Routes = [
     path: 'juego',
     loadChildren: () => import('./Pages/juego/juego.module').then( m => m.JuegoPageModule)
   },
+  
+  {
+    path: 'recor',
+    loadChildren: () => import('./Pages/recor/recor.module').then( m => m.RecorPageModule)
+  },
 ];
 
 @NgModule({

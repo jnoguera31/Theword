@@ -17,8 +17,14 @@
   background-color: aqua;
   
 }
-.info{
+
+h1{
+  font-size: 20px;
+}
+.datos{
+  width: 100%;
   display: flex;
-  margin-left: 5px;
-  margin-right: 5px;
+  justify-content: space-evenly;
+  
+  
 }

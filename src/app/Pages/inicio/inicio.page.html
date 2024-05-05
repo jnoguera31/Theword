@@ -5,11 +5,12 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Inicio</ion-title>
+      <ion-title >MENU</ion-title>
     </ion-toolbar>
   </ion-header>
  
   <ion-input 
+
   id="label" 
   [(ngModel)]="username" 
   autofocus="true" 
@@ -18,14 +19,29 @@
   label-placement="floating" 
   fill="outline" 
   placeholder="Ingresa nombre"
+  
   ></ion-input>
   
   <ion-button 
+
   *ngFor="let button of buttons" 
   expand="block" 
   [color]="button.color" 
   [disabled]="this.username.length < 3" 
   (click)="Onplay(button)" 
-  >{{ button.label }}</ion-button>
+  >{{ button.label }}
+
+</ion-button>
+
+<ion-button id="Recor" 
+  expand="block"
+  shape="round"
+  (click)="goTorecor()"
+>
+<ion-icon slot="icon-only" name="star"></ion-icon>
+
+</ion-button>
+
+
   
 </ion-content>

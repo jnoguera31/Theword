@@ -1,18 +1,31 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Juego</ion-title>
-  </ion-toolbar>
+  
 </ion-header>
 
-<ion-content [fullscreen]="true" scrollEvents="false">
-  <div class="info">
+<ion-content [fullscreen]="true" >
+  
+  <div class="datos">
 
-   <h1>Jugador: {{ player }}</h1>
-   <h1>Nivel:  {{ nivel }}</h1>
+    <div class="col1">
 
-   <h1 id="tiempo" >Tiempo</h1>
+      <h1>Jugador: {{ player }}</h1>
+      <h1>Nivel:  {{ nivel }}</h1>
 
-  </div>
+    </div> 
+
+    <div class="col2">
+
+      <h1 id="tiempo" >Tiempo</h1>
+      <h1 id="Intentos" >Intentos: {{intentos}}</h1>
+
+    </div>
+
+
+  </div> 
+ 
+
+
+  
   
  
   <ng-container *ngFor="let fila of filas; let i = index">

@@ -6,6 +6,8 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 
+
+
 @Component({
   selector: 'app-juego',
   templateUrl: './juego.page.html',
@@ -19,9 +21,11 @@ export class JuegoPage implements OnInit {
   numeroFilas=7 // Puedes cambiar este valor según tus necesidades
   palabraSecreta = "";
   filaActual: number = 0; 
+  intentos: number = 0;
   level: any;
   player: any;
   nivel: string = "";
+  words: any[]=[];
   
 
   constructor(private wordsService: WordsService, private alertController: AlertController, public router: Router) {
@@ -29,13 +33,30 @@ export class JuegoPage implements OnInit {
   }
 
   ngOnInit() {
+
     this.getPlayer();
     this.getLevel();
-    this.getRandomWord();
-  }
-
+    this.GetWordRam();
+   
+    
   
 
+  }
+
+  async GetWordRam() {
+    try {
+      const palabraS = await this.wordsService.GetWords();
+      this.palabraSecreta = palabraS.toUpperCase();
+      console.log("palabra secreta:", palabraS);
+
+    } catch (error) {
+      console.error("Error al obtener las palabras:", error);
+    }
+  }
+  
+
+
+  /* -- Obtener palabras del archivo json local
 
   getRandomWord() {
     this.wordsService.getRandomWord().subscribe(word => {
@@ -43,6 +64,7 @@ export class JuegoPage implements OnInit {
       console.log("palabra secreta: ", this.palabraSecreta);
     });
   }
+  */
 
   getPlayer() {
     Storage.get({ key: 'nombre' }).then((result) => {
@@ -58,14 +80,17 @@ export class JuegoPage implements OnInit {
       if (this.level == '1') {
         this.nivel = "Fácil";
         this.numeroFilas = 7;
+        this.intentos=7
         console.log('Número de filas para nivel fácil:', this.numeroFilas);
       } else if (this.level == '2') {
         this.nivel = "Intermedio";
         this.numeroFilas = 5;
+        this.intentos=5;
         console.log('Número de filas para nivel Intermedio:', this.numeroFilas);
       } else {
         this.nivel = "Difícil";
         this.numeroFilas = 3;
+        this.intentos=3;
         console.log('Número de filas para nivel dificil:', this.numeroFilas);
       }
 
@@ -139,6 +164,10 @@ export class JuegoPage implements OnInit {
   
     // Si todos los campos están llenos, pasar a la siguiente fila
     console.log('Todos los campos de la fila', this.filaActual + 1, 'están llenos');
+    this.intentos=this.intentos-1;
+    if (this.intentos==0){
+      this.Perder();
+    }
     this.siguienteFila();
     return true;
   }
@@ -171,6 +200,14 @@ export class JuegoPage implements OnInit {
 
     /// Logica para guardar info en DB
   }
+
+  Perder(){
+    alert("PERDISTE")
+  }
+
+
+
+  
   async presentAlert() {
     const alert = await this.alertController.create({
       header: 'GANASTE',
@@ -194,6 +231,6 @@ export class JuegoPage implements OnInit {
     await alert.present();
   }
 
-
+  
 
 }
