@@ -2,35 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\words;
+use App\Models\Record;
 use Illuminate\Http\Request;
 
-class Wordcontroller extends Controller
+class RecordController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(words::all());
-    } 
+        return Record::all();
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $word = new words();
-        $word->$word = $request->word;
-        $word->save();
-
-        return response()->json($word);
+        $record = Record::create($request->all());
+        return response()->json($record, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Record $record)
     {
         //
     }
@@ -38,7 +35,7 @@ class Wordcontroller extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, words $word)
+    public function update(Request $request, Record $record)
     {
         //
     }
@@ -46,11 +43,8 @@ class Wordcontroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
-
+    public function destroy(Record $record)
     {
-        $word = words::find($id);
-        $word->delete();
-        return response()->json("Palabra borrada = ",$word);
+        //
     }
 }

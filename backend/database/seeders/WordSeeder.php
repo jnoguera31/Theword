@@ -19,6 +19,5 @@ class WordSeeder extends Seeder
                 'word' => $word,
             ]);
         }
-
     }
 }

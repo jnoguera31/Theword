@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RecordService } from 'src/app/services/record.services';
 
 @Component({
   selector: 'app-recor',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recor.page.scss'],
 })
 export class RecorPage implements OnInit {
+  records: any[] = [];
+  constructor(private recordService: RecordService) { }
 
-  constructor() { }
-
-  ngOnInit() {
+  ngOnInit(): void {
+    this.recordService.getTopRecords().subscribe((data: any[]) => {
+      this.records = data;
+      console.log(this.records)
+    });
   }
 
 }

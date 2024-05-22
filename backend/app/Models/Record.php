@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Ramsey\Uuid\Codec\TimestampFirstCombCodec;
 
-class words extends Model
+class Record extends Model
 {
     use HasFactory;
-    public $timestamp=false;
+    protected $fillable = [
+        'nombre', 'palabra', 'nivel', 'tiempo', 'intentos', 'puntos'
+    ];
+    
 }

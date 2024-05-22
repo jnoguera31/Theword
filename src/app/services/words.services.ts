@@ -32,7 +32,7 @@ export class WordsService {
 
   async GetWords(): Promise<string> {
     const options = {
-      url: 'http://localhost:8000/words'
+      url: 'http://localhost:8000/api/words'
     };
   
     try {
