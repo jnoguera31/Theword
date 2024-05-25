@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { RecordService } from 'src/app/services/record.services';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Storage } from '@capacitor/storage';
 import { WordsService } from 'src/app/services/words.services';
 import { FilaInputs } from 'src/app/model/fila-inputs.model';
@@ -13,12 +14,17 @@ import { Router } from '@angular/router';
   templateUrl: './juego.page.html',
   styleUrls: ['./juego.page.scss'],
 })
-export class JuegoPage implements OnInit {
+export class JuegoPage implements OnInit, OnDestroy {
   @ViewChildren('inputFila', { read: ElementRef }) inputsFila: QueryList<ElementRef>;
+
+
   // VARIABLES
 
+  minutes:number= 0;
+  seconds:number = 0;
+  private interval: any;
   filas: FilaInputs[] = [];
-  numeroFilas=7 // Puedes cambiar este valor según tus necesidades
+  numeroFilas=7 
   palabraSecreta = "";
   filaActual: number = 0; 
   intentos: number = 0;
@@ -26,9 +32,12 @@ export class JuegoPage implements OnInit {
   player: any;
   nivel: string = "";
   words: any[]=[];
+  puntos: number = 0;
+  tiempo: any = 0;
+  attemps: number = 1;
   
 
-  constructor(private wordsService: WordsService, private alertController: AlertController, public router: Router) {
+  constructor(private wordsService: WordsService, private alertController: AlertController, public router: Router, private RecordService: RecordService) {
     this.inputsFila = new QueryList<ElementRef>();
   }
 
@@ -37,11 +46,32 @@ export class JuegoPage implements OnInit {
     this.getPlayer();
     this.getLevel();
     this.GetWordRam();
+    this.starTimer();
    
     
   
 
   }
+
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
+  }
+
+  starTimer(){
+    this.interval = setInterval(() => {
+      this.seconds++;
+      if (this.seconds == 60) {
+        this.minutes++;
+        this.seconds = 0;
+      }
+    }, 1000);
+  }
+
+  BackHome(){
+    this.router.navigateByUrl("/inicio")
+    this.ClearData();
+  }
+
 
   async GetWordRam() {
     try {
@@ -52,6 +82,11 @@ export class JuegoPage implements OnInit {
     } catch (error) {
       console.error("Error al obtener las palabras:", error);
     }
+  }
+
+  calculatePuntos(): void {
+    this.puntos = (this.level - this.attemps) +10 + this.tiempo;
+    console.log("PUNTOS",this.puntos)
   }
   
 
@@ -165,6 +200,7 @@ export class JuegoPage implements OnInit {
     // Si todos los campos están llenos, pasar a la siguiente fila
     console.log('Todos los campos de la fila', this.filaActual + 1, 'están llenos');
     this.intentos=this.intentos-1;
+    this.attemps= this.attemps + 1;
     if (this.intentos==0){
       this.Perder();
     }
@@ -196,13 +232,16 @@ export class JuegoPage implements OnInit {
     // Mensaje de fecilitacion
     
     this.presentAlert()
+    this.Addrecord()
 
 
-    /// Logica para guardar info en DB
+    
   }
 
   Perder(){
     alert("PERDISTE")
+    alert("La palabra era: "+this.palabraSecreta)
+    this.ClearData();
   }
 
 
@@ -231,6 +270,41 @@ export class JuegoPage implements OnInit {
     await alert.present();
   }
 
-  
+  Addrecord(): void {
+    this.calculatePuntos();
+    this.tiempo=this.minutes+":"+this.seconds;
+    const newRecord = {
+      nombre: this.player,
+      palabra: this.palabraSecreta,
+      nivel: this.level,
+      tiempo: this.tiempo,
+      intentos: this.attemps,
+      puntos: this.puntos,
+      
+    };
+
+    this.RecordService.addRecord(newRecord).subscribe(response => {
+      console.log('Record agregado correctamente', response);
+    }, error => {
+      console.error('Error al añadir record', error);
+    });
+
+    this.ClearData()
+
+  }
+
+
+  ClearData(){
+    console.log("Vaciando datos ...")
+    Storage.remove({ key: 'nombre' });
+    Storage.remove({ key: 'nivel' });
+    this.palabraSecreta="";
+    this.intentos=0;
+    this.nivel="";
+    this.player="";
+    this.router.navigateByUrl('/inicio');
+
+  }
+
 
 }

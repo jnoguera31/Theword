@@ -15,7 +15,7 @@
 
     <div class="col2">
 
-      <h1 id="tiempo" >Tiempo</h1>
+      <h1 id="tiempo" >Tiempo: {{minutes}}:{{seconds| number:'2.0'}}</h1>
       <h1 id="Intentos" >Intentos: {{intentos}}</h1>
 
     </div>
@@ -40,5 +40,8 @@
   
   
   <ion-button (click)="verificarFila()">Verificar</ion-button> 
+  <ion-button id="back" (click)="BackHome()">
+    <ion-icon slot="icon-only"  name="exit-outline" ></ion-icon>
+  </ion-button>
 
 </ion-content>

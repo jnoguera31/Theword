@@ -27,24 +27,41 @@ class RecordController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Record $record)
+    public function show($id)
     {
-        //
+        $record = Record::find($id);
+
+        if ($record) {
+            return response()->json($record, 200);
+        } else {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Record $record)
+    public function update(Request $request, $id)
     {
-        //
+        $record = Record::find($id);
+
+        if ($record) {
+            $record->update($request->all());
+            return response()->json($record, 200);
+        } else {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Record $record)
+    public function destroy($id)
     {
-        //
+        $record = Record::find($id);
+
+        if ($record) {
+            $record->delete();
+            return response()->json(['message' => 'Record deleted successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
     }
 }

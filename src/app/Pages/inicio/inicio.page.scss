@@ -3,11 +3,12 @@
 
 
 ion-content{
-
-   background-color: #0c0c0ba2; 
-
+ --background: #141212e8;    
 }
-
+ion-toolbar{
+    --background: none;
+    padding-top: 5px;
+}
 
 
 ion-title{
@@ -16,7 +17,8 @@ ion-title{
     font-family: "Poetsen One", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 37px;
+    font-size: 37px;padding-top: 5px;
+    
 }
 
 ion-toolbar{
