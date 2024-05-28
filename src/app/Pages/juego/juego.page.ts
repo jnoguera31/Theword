@@ -5,6 +5,7 @@ import { WordsService } from 'src/app/services/words.services';
 import { FilaInputs } from 'src/app/model/fila-inputs.model';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { PhotoService } from 'src/app/services/photo.services';
 
 
 
@@ -34,10 +35,12 @@ export class JuegoPage implements OnInit, OnDestroy {
   words: any[]=[];
   puntos: number = 0;
   tiempo: any = 0;
-  attemps: number = 1;
+  attemps: number = 0;
+  highestPoints: number=0;
+  photoUrl: string | undefined;
   
 
-  constructor(private wordsService: WordsService, private alertController: AlertController, public router: Router, private RecordService: RecordService) {
+  constructor(private wordsService: WordsService, private photoService: PhotoService, private alertController: AlertController, public router: Router, private RecordService: RecordService) {
     this.inputsFila = new QueryList<ElementRef>();
   }
 
@@ -47,6 +50,10 @@ export class JuegoPage implements OnInit, OnDestroy {
     this.getLevel();
     this.GetWordRam();
     this.starTimer();
+    this.Get1Record();
+ 
+
+    
    
     
   
@@ -56,6 +63,17 @@ export class JuegoPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     clearInterval(this.interval);
   }
+
+
+  Get1Record(){
+
+    this.RecordService.getHighestRecordPoints().subscribe(points => {
+      this.highestPoints = points;
+      console.log('Highest Points:', this.highestPoints);
+    });
+    
+  }
+
 
   starTimer(){
     this.interval = setInterval(() => {
@@ -85,7 +103,7 @@ export class JuegoPage implements OnInit, OnDestroy {
   }
 
   calculatePuntos(): void {
-    this.puntos = (this.level - this.attemps) +10 + this.tiempo;
+    this.puntos = (this.level - this.attemps) +10 + this.tiempo + 450;
     console.log("PUNTOS",this.puntos)
   }
   
@@ -227,16 +245,33 @@ export class JuegoPage implements OnInit, OnDestroy {
   }
 
 
-  Ganar(){
+  async Ganar() {
+    try {
+        // Ejecutar calculatePuntos y esperar a que termine
+        await this.calculatePuntos();
+        
+        console.log("REC: ", this.highestPoints);
+        
+        // Verificar si los puntos son mayores que el puntaje más alto
+        if (this.puntos > this.highestPoints) {
+            alert("¡Felicidades! Eres el nuevo Top 1");
+            alert("Necesitamos una foto tuya");
+            
+            // Tomar y guardar la foto y esperar a que termine
+            await this.takeAndSavePhoto();
+        }
+        
+        // Presentar la alerta y esperar a que termine
+        await this.presentAlert();
+        
+        // Agregar el registro y esperar a que termine
+        await this.Addrecord();
+    } catch (error) {
+        // Manejar cualquier error que ocurra durante la ejecución
+        console.error('Error:', error);
+    }
+}
 
-    // Mensaje de fecilitacion
-    
-    this.presentAlert()
-    this.Addrecord()
-
-
-    
-  }
 
   Perder(){
     alert("PERDISTE")
@@ -271,7 +306,8 @@ export class JuegoPage implements OnInit, OnDestroy {
   }
 
   Addrecord(): void {
-    this.calculatePuntos();
+
+    
     this.tiempo=this.minutes+":"+this.seconds;
     const newRecord = {
       nombre: this.player,
@@ -280,6 +316,7 @@ export class JuegoPage implements OnInit, OnDestroy {
       tiempo: this.tiempo,
       intentos: this.attemps,
       puntos: this.puntos,
+      foto: this.photoUrl
       
     };
 
@@ -303,7 +340,17 @@ export class JuegoPage implements OnInit, OnDestroy {
     this.nivel="";
     this.player="";
     this.router.navigateByUrl('/inicio');
+    this.photoUrl="";
 
+  }
+
+  async takeAndSavePhoto() {
+    try {
+      this.photoUrl = await this.photoService.savePhotoToVariable();
+    } catch (error) {
+      this.photoUrl="NO PHOTO"
+      console.error("Error taking photo:", error);
+    }
   }
 
 

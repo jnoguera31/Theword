@@ -19,6 +19,7 @@ return new class extends Migration
         $table->string('tiempo');
         $table->integer('intentos');
         $table->integer('puntos');
+        $table->string('foto')->nullable();
         });
     }
 

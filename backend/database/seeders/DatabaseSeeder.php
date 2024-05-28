@@ -1,7 +1,10 @@
 <?php
 
 namespace Database\Seeders;
+
+use App\Models\Record;
 use Database\Seeders\WordSeeder;
+use Illuminate\Auth\Recaller;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([WordSeeder::class]);
-        $this->call([RecordSeeder::class]);
+        $this->call([WordSeeder::class,RecordSeeder::class]);
+       
     }
 }

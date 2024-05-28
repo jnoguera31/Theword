@@ -20,8 +20,8 @@ class RecordSeeder extends Seeder
                 'tiempo' => '00:05:00',
                 'intentos' => 3,
                 'puntos' => 100,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'foto' => 'NO FOTO',
+                
             ],
             [
                 'nombre' => 'Usuario2',
@@ -30,8 +30,7 @@ class RecordSeeder extends Seeder
                 'tiempo' => '00:04:30',
                 'intentos' => 2,
                 'puntos' => 200,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'foto' => 'NO FOTO',
             ]
         ]);
     }

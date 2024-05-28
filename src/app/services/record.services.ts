@@ -29,5 +29,16 @@ export class RecordService {
     return this.http.post<any>(this.apiUrl, record, { headers });
   }
 
+  getHighestRecordPoints(): Observable<number> {
+    return this.http.get<any[]>(this.apiUrl).pipe(
+      map(records => {
+        const highestRecord = records.reduce((max, record) => 
+          record.puntos > max.puntos ? record : max, records[0]
+        );
+        return highestRecord.puntos;
+      })
+    );
+  }
+
 
 }
