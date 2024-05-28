@@ -12,14 +12,17 @@
   
   
     <ion-list>
-      <ion-item *ngFor="let record of records">
+      <ion-item *ngFor="let record of records; let i=index">
         <ion-label>
+
+          <h2>Top: {{i + 1}}</h2>
           <h2>{{ record.nombre }}</h2>
           <p>Palabra: {{ record.palabra }}</p>
           <p>Nivel: {{ record.nivel }}</p>
           <p>Tiempo: {{ record.tiempo }}</p>
           <p>Intentos: {{ record.intentos }}</p>
           <p>Puntos: {{ record.puntos }}</p>
+
         </ion-label>
       </ion-item>
     </ion-list>

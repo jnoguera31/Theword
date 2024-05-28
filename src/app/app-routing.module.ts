@@ -21,6 +21,10 @@ const routes: Routes = [
     path: 'recor',
     loadChildren: () => import('./Pages/recor/recor.module').then( m => m.RecorPageModule)
   },
+  {
+    path: 'pruebaphoto',
+    loadChildren: () => import('./Pages/pruebaphoto/pruebaphoto.module').then( m => m.PruebaphotoPageModule)
+  },
 ];
 
 @NgModule({

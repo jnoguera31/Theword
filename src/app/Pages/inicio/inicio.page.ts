@@ -44,7 +44,7 @@ export class InicioPage implements OnInit {
     // Guardar el nivel seleccionado en el almacenamiento local
     await Storage.set({
       key: 'nombre',
-      value: this.username
+      value: this.username.toUpperCase()
     })
 
     await Storage.set({

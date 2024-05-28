@@ -1,3 +1,7 @@
+ion-content{
+  --background: #141212e8;    
+ }
+
 .input-row{
     display: flex;
     justify-content: space-around; /* Distribuye los inputs equitativamente en el espacio disponible */
@@ -25,6 +29,16 @@ h1{
   width: 100%;
   display: flex;
   justify-content: space-evenly;
+  color: aliceblue;
   
   
+}
+
+.coll h1{
+  border: solid 2px red;
+}
+
+#back{
+  margin-top: 20px;
+  color: rgb(230, 230, 230);
 }
