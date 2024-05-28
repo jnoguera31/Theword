@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class PhotoService {
 
   constructor() { }
@@ -13,7 +13,7 @@ export class PhotoService {
     const photo = await Camera.getPhoto({
       resultType: CameraResultType.Uri, // Obtener la foto como URI
       source: CameraSource.Camera, // Usar la cámara del dispositivo
-      quality: 100 // Calidad de la imagen
+      quality: 90 // Calidad de la imagen
     });
     return photo;
   }

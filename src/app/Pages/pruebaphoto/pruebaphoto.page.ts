@@ -14,8 +14,12 @@ export class PruebaphotoPage {
   constructor(private photoService: PhotoService) {}
 
   async takeAndSavePhoto() {
-    const photo = await this.photoService.takePhoto();
-    this.photoUrl = await this.photoService.savePhoto(photo);
+    try {
+      const photo = await this.photoService.takePhoto();
+      this.photoUrl = await this.photoService.savePhoto(photo);
+    } catch (error) {
+      console.error("Error taking photo:", error);
+    }
   }
 }
 
