@@ -1,12 +1,42 @@
 ion-content{
     --background: #141212e8;    
    }
+
+.label-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.text-container {
+    flex: 1;
+  }
+
+.image-container {
+    flex: 0 0 80px;
+    text-align: right;
+  }
+
+.player-image {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 10px; /* Borde redondeado */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    transition: transform 0.3s, box-shadow 0.3s; /* Transición suave */
+  }
+
+.player-image:hover {
+    transform: scale(1.1); /* Aumentar tamaño al pasar el ratón */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+    filter: brightness(1.1); /* Incrementar brillo */
+  }
   
 
 ion-title{
     padding: 0%;
     border-bottom: solid black 2px;
 }
+
 #back{
     --color-hover: red;
 }

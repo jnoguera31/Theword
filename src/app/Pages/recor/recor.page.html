@@ -11,23 +11,24 @@
 
   
   
-    <ion-list>
-      <ion-item *ngFor="let record of records; let i=index">
-        <ion-label>
-
+  <ion-list>
+    <ion-item *ngFor="let record of records; let i=index">
+      <ion-label class="label-container">
+        <div class="text-container">
           <h2>Top: {{i + 1}}</h2>
-          <img src="data:image/png;base64,{{ record.foto }}" alt="Imagen Jugador" style="max-width: 80px; max-height: 80px; " >
           <h2>{{ record.nombre }}</h2>
           <p>Palabra: {{ record.palabra }}</p>
           <p>Nivel: {{ record.nivel }}</p>
           <p>Tiempo: {{ record.tiempo }}</p>
           <p>Intentos: {{ record.intentos }}</p>
           <p>Puntos: {{ record.puntos }}</p>
-          
-
-        </ion-label>
-      </ion-item>
-    </ion-list>
+        </div>
+        <div class="image-container">
+          <img src="{{ record.foto }}" alt="Imagen Jugador" class="player-image">
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
   
   
 </ion-content>

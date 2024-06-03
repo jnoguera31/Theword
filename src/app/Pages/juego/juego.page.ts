@@ -26,9 +26,9 @@ export class JuegoPage implements OnInit, OnDestroy {
   private interval: any;
   filas: FilaInputs[] = [];
   numeroFilas=7 
-  palabraSecreta = "";
   filaActual: number = 0; 
   intentos: number = 0;
+  palabraSecreta = "";
   level: any;
   player: any;
   nivel: string = "";
@@ -103,7 +103,7 @@ export class JuegoPage implements OnInit, OnDestroy {
   }
 
   calculatePuntos(): void {
-    this.puntos = (this.level - this.attemps) +10 + this.tiempo + 450;
+    this.puntos = (this.level - this.attemps) +10 + this.tiempo + 300;
     console.log("PUNTOS",this.puntos)
   }
   
@@ -267,16 +267,16 @@ export class JuegoPage implements OnInit, OnDestroy {
         // Agregar el registro y esperar a que termine
         await this.Addrecord();
     } catch (error) {
-        // Manejar cualquier error que ocurra durante la ejecución
+        
         console.error('Error:', error);
     }
 }
 
 
-  Perder(){
+  async Perder(){
     alert("PERDISTE")
-    alert("La palabra era: "+this.palabraSecreta)
-    this.ClearData();
+    await alert("La palabra era: "+this.palabraSecreta)
+    this.BackHome();
   }
 
 
@@ -316,9 +316,11 @@ export class JuegoPage implements OnInit, OnDestroy {
       tiempo: this.tiempo,
       intentos: this.attemps,
       puntos: this.puntos,
-      foto: this.photoUrl
+      foto: this.photoUrl,
       
     };
+    
+    console.log('Datos enviados al servicio:', newRecord);
 
     this.RecordService.addRecord(newRecord).subscribe(response => {
       console.log('Record agregado correctamente', response);
@@ -347,8 +349,9 @@ export class JuegoPage implements OnInit, OnDestroy {
   async takeAndSavePhoto() {
     try {
       this.photoUrl = await this.photoService.savePhotoToVariable();
+      console.log("Base64: ", this.photoUrl)
     } catch (error) {
-      this.photoUrl="NO PHOTO"
+      this.photoUrl = "NO PHOTO";
       console.error("Error taking photo:", error);
     }
   }

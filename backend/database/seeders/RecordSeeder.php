@@ -20,7 +20,7 @@ class RecordSeeder extends Seeder
                 'tiempo' => '00:05:00',
                 'intentos' => 3,
                 'puntos' => 100,
-                'foto' => 'NO FOTO',
+                'foto' => 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg',
                 
             ],
             [
@@ -30,7 +30,7 @@ class RecordSeeder extends Seeder
                 'tiempo' => '00:04:30',
                 'intentos' => 2,
                 'puntos' => 200,
-                'foto' => 'NO FOTO',
+                'foto' => 'https://www.fichajes.com/build/images/player-covers/cristiano-ronaldo.352c95f5.jpg',
             ]
         ]);
     }
