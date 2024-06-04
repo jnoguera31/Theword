@@ -260,6 +260,7 @@ export class JuegoPage implements OnInit, OnDestroy {
             // Tomar y guardar la foto y esperar a que termine
             await this.takeAndSavePhoto();
         }
+        this.photoUrl="https://www.fichajes.com/build/images/player-covers/cristiano-ronaldo.352c95f5.jpg";
         
         // Presentar la alerta y esperar a que termine
         await this.presentAlert();
@@ -316,7 +317,7 @@ export class JuegoPage implements OnInit, OnDestroy {
       tiempo: this.tiempo,
       intentos: this.attemps,
       puntos: this.puntos,
-      foto: this.photoUrl,
+      foto: this.photoUrl
       
     };
     
